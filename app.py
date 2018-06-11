@@ -157,6 +157,12 @@ async def on_message(message):
                 config.remove_option('monitoring', message.server.id)
                 write_config(config)
 
+        if command[0] == '!setname':
+            if len(command) == 2:
+                if assert_permission():
+                    print(client.user)
+                    await client.change_nickname(message.server.me, command[1])
+
         if command[0] == '!status':
             if config.has_section(str(message.server.id)):
                 if len(command) == 1:
