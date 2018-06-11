@@ -160,7 +160,6 @@ async def on_message(message):
         if command[0] == '!setname':
             if len(command) == 2:
                 if assert_permission():
-                    print(client.user)
                     await client.change_nickname(message.server.me, command[1])
 
         if command[0] == '!status':
