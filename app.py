@@ -196,7 +196,7 @@ async def monitoring():
                 await client.send_message(discord.Object(id=channel), e.formatted_monitoring())
                 print("STATUS CHANGED: " + server)
                 write_config(config)
-        await asyncio.sleep(10)
+        await asyncio.sleep(120)
 
 client.loop.create_task(monitoring())
 
