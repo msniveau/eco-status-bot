@@ -18,8 +18,8 @@ def discord_message(forma, data, tag=''):
     daytime=''
     if data['status']['error'] == True:
         message=message.replace('{server_tag}', tag) \
-            .replace('{ip}', data['addr'][0]) \
-            .replace('{port}', data['addr'][1])
+            .replace('{ip}', data['whois']['addr']['ip']) \
+            .replace('{port}', str(data['whois']['addr']['port']))
     else:
         sincestart=data['game']['info']['details']['TimeSinceStart']
         daytime+=(str(int(sincestart/60/60%24))) + ' days '
@@ -37,6 +37,8 @@ def discord_message(forma, data, tag=''):
             .replace('{address}', data['whois']['addr']['ip'] + ':' + str(data['whois']['addr']['port'])) \
             .replace('{provider}', data['whois']['organization']) \
             .replace('{country}', data['whois']['iso_code']) \
+            .replace('{ip}', data['whois']['addr']['ip']) \
+            .replace('{port}', str(data['whois']['addr']['port'])) \
             .replace('{gametime}', daytime)
     return message
 
@@ -50,7 +52,6 @@ class EcoStatus():
         self.response = r
         self.response['addr'] = addr
         self.response['tag'] = tag
-        print(r)
         r['game']['info']['server_name'] = re.sub(r'<.+?>', '', r['game']['info']['server_name'])
 
     def formatted_message(self):
