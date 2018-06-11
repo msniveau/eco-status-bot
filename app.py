@@ -16,8 +16,8 @@ async def on_ready():
 def discord_message(forma, data, tag=''):
     message=forma
     daytime=''
-    if 'status' in data and data['status'] == False:
-        message=message.replace('{server_tag}', data['tag']) \
+    if data['status']['error'] == True:
+        message=message.replace('{server_tag}', tag) \
             .replace('{ip}', data['addr'][0]) \
             .replace('{port}', data['addr'][1])
     else:
@@ -45,36 +45,30 @@ class EcoStatus():
         self.sid = sid
         self.tag = tag
         self.ip = ip
-        self.status = True
         addr=ip.rstrip().split(':')
         r = json.loads(requests.get('http://85.190.150.122/api/eco/' + addr[0] + '/' + addr[1]).text)
-        if r['status']['error']:
-            self.response = {
-                'status': False,
-                'addr': addr,
-                'tag': tag
-            }
-            self.status = False
-        else:
-            r['game']['info']['server_name'] = re.sub(r'<.+?>', '', r['game']['info']['server_name'])
-            self.response = r
+        self.response = r
+        self.response['addr'] = addr
+        self.response['tag'] = tag
+        print(r)
+        r['game']['info']['server_name'] = re.sub(r'<.+?>', '', r['game']['info']['server_name'])
 
     def formatted_message(self):
-        if self.status == False:
+        if self.response['status']['error'] == True:
             return self.ip.rstrip() + ' is unreachable'
         if config.has_option('message_format', str(self.sid)):
-            return discord_message(config.get('message_format',str(self.sid)), self.response)
+            return discord_message(config.get('message_format',str(self.sid)), self.response, self.tag)
         else:
-            return discord_message(config.get('message_format','default'), self.response)
+            return discord_message(config.get('message_format','default'), self.response, self.tag)
 
     def formatted_monitoring(self):
         status='online'
-        if self.status == False:
+        if self.response['status']['error'] == True:
             status='offline'
         if config.has_option('message_format', str(self.sid) + '_' + status):
-            return discord_message(config.get('message_format',str(self.sid) + '_' + status), self.response)
+            return discord_message(config.get('message_format',str(self.sid) + '_' + status), self.response, self.tag)
         else:
-            return discord_message(config.get('message_format','default' + '_' + status), self.response)
+            return discord_message(config.get('message_format','default' + '_' + status), self.response, self.tag)
 
 async def assert_permission():
     if not message.author.server_permissions.manage_server:
@@ -190,9 +184,9 @@ async def monitoring():
                 if config.has_option('states', dserver + '_' + server):
                     state = config.get('states', dserver + '_' + server)
                 e = EcoStatus(config.get(dserver, server), dserver, server)
-                if e.status == False and state == 'offline':
+                if e.response['status']['error'] and state == 'offline':
                     continue
-                if e.status == True and state == 'online':
+                if e.response['status']['error'] == False and state == 'online':
                     continue
                 newstate='online'
                 if state == 'online':
@@ -201,7 +195,7 @@ async def monitoring():
                 await client.send_message(discord.Object(id=channel), e.formatted_monitoring())
                 print("STATUS CHANGED: " + server)
                 write_config(config)
-        await asyncio.sleep(120)
+        await asyncio.sleep(10)
 
 client.loop.create_task(monitoring())
 
