@@ -5,6 +5,12 @@ config.read('config.ini')
 
 client = discord.Client()
 
+sentry = False
+if len(config.get('app','sentry')) > 0:
+    print("running sentry exception tracker")
+    from raven import Client
+    sentry = Client(config.get('app','sentry'));
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -177,7 +183,9 @@ async def on_message(message):
                     else:
                         await client.send_message(message.channel, 'server not found.')
     except Exception:
-            pass #sentry.captureException(data={'message': message.content, 'discord': message.server.id})
+            if sentry != False:
+                sentry.captureException()
+            pass
 
 async def monitoring():
     await client.wait_until_ready()
