@@ -1,4 +1,4 @@
-import sys, discord, configparser, asyncio, requests, json, re
+import time, sys, discord, configparser, asyncio, requests, json, re
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -198,6 +198,9 @@ async def monitoring():
                 if config.has_option('states', dserver + '_' + server):
                     state = config.get('states', dserver + '_' + server)
                 e = EcoStatus(config.get(dserver, server), dserver, server)
+                if e.response['status']['error']:
+                   time.sleep(30)
+                   e = EcoStatus(config.get(dserver, server), dserver, server)
                 if e.response['status']['error'] and state == 'offline':
                     continue
                 if e.response['status']['error'] == False and state == 'online':
