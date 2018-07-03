@@ -1,4 +1,6 @@
-import time, sys, discord, configparser, asyncio, requests, json, re
+import os, time, sys, discord, configparser, asyncio, requests, json, re
+
+print("Starting in cwd: " + os.getcwd())
 
 config = configparser.ConfigParser()
 config.read('config.ini')
