@@ -5,6 +5,9 @@ sentry=
 token=somediscordbottoken
 
 [monitoring]
+default = Server online! Servername: {server_name}{break}Players online: {player_count}
+default_offline = {server_tag} is offline
+default_online = {server_tag} is online
 
 [states]
 

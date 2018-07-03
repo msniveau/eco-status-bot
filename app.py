@@ -2,10 +2,12 @@ import os, time, sys, discord, configparser, asyncio, requests, json, re
 
 print("Starting in cwd: " + os.getcwd())
 config = configparser.ConfigParser()
+configfile=''
 try:
-    config.read(os.environ['CONFIG_PATH'] + '/config.ini')
+    configfile = os.environ['CONFIG_PATH'] + '/config.ini'
 except KeyError:
-    config.read('config.ini')
+    configfile='config.ini'
+config.read(configfile)
 
 client = discord.Client()
 
@@ -88,8 +90,8 @@ async def assert_permission():
     return True
 
 def write_config(config):
-    with open('config.ini', 'w') as configfile:
-        config.write(configfile)
+    with open(configfile, 'w') as f:
+        config.write(f)
 
 @client.event
 async def on_message(message):
@@ -194,7 +196,7 @@ async def on_message(message):
 async def monitoring():
     await client.wait_until_ready()
     while True:
-        config.read('config.ini')
+        config.read(configfile)
         for dserver in config.options('monitoring'):
             for server in config.options(dserver):
                 state = 'online'
