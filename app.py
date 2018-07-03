@@ -1,7 +1,7 @@
 import os, time, sys, discord, configparser, asyncio, requests, json, re
 
 print("Starting in cwd: " + os.getcwd())
-
+time.sleep(30000)
 config = configparser.ConfigParser()
 try:
     config.read(os.environ['CONFIG_PATH'])
