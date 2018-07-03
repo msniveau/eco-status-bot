@@ -1,1 +1,2 @@
 discord==0.0.2
+requests==2.9.1
