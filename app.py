@@ -3,7 +3,10 @@ import os, time, sys, discord, configparser, asyncio, requests, json, re
 print("Starting in cwd: " + os.getcwd())
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+try:
+    config.read(os.environ['CONFIG_PATH'])
+except KeyError:
+    config.read('config.ini')
 
 client = discord.Client()
 
