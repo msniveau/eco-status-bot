@@ -60,7 +60,7 @@ class EcoStatus():
         self.tag = tag
         self.ip = ip
         addr=ip.rstrip().split(':')
-        r = json.loads(requests.get('http://85.190.150.122/api/eco/' + addr[0] + '/' + addr[1]).text)
+        r = json.loads(requests.get('https://query.li/api/eco/' + addr[0] + '/' + addr[1]).text)
         self.response = r
         self.response['addr'] = addr
         self.response['tag'] = tag
