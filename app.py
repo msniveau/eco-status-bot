@@ -220,6 +220,7 @@ async def monitoring():
                 write_config(config)
         await asyncio.sleep(120)
 
-client.loop.create_task(monitoring())
+# disable monitoring due to difficulties - todo: refactor whole code
+#client.loop.create_task(monitoring())
 
 client.run(config.get('discord','token'))
