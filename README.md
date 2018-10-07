@@ -1,3 +1,7 @@
+# not continued
+(new version)[https://github.com/msniveau/discord-statusbot]
+
+
 # eco-status-bot
 pretty simple, just clone the repo, rename config.ini.dist to config.ini, put in your discord token and thats it, just run the app.py
 
