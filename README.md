@@ -1,5 +1,7 @@
 # not continued
-https://github.com/msniveau/discord-statusbot
+[new version supporting multiple games](https://github.com/msniveau/discord-statusbot)
+
+
 
 
 # eco-status-bot
