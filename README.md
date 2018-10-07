@@ -1,5 +1,5 @@
 # not continued
-(new version)[https://github.com/msniveau/discord-statusbot]
+https://github.com/msniveau/discord-statusbot
 
 
 # eco-status-bot
